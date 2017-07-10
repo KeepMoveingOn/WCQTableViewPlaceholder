@@ -33,33 +33,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - UITableViewDataSource Methods
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
-    return self.dataArray.count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([UITableViewCell class])];
-    cell.backgroundColor = [UIColor colorWithRed:arc4random()%256/255.0
-                                           green:arc4random()%256/255.0
-                                            blue:arc4random()%256/255.0
-                                           alpha:1];
-    return cell;
-}
-
-#pragma mark - UITableViewDelegate Methods
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    return 100;
-}
-
 #pragma mark - Refresh Methods
 - (void)reloadData {
     
@@ -93,6 +66,33 @@
     [self.tableView.mj_footer endRefreshing];
 }
 
+#pragma mark - UITableViewDataSource Methods
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    
+    return self.dataArray.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([UITableViewCell class])];
+    cell.backgroundColor = [UIColor colorWithRed:arc4random()%256/255.0
+                                           green:arc4random()%256/255.0
+                                            blue:arc4random()%256/255.0
+                                           alpha:1];
+    return cell;
+}
+
+#pragma mark - UITableViewDelegate Methods
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    return 100;
+}
+
 #pragma mark - WCQTableViewPlaceholderDelegate Methods
 - (UIView *)wcq_tableViewPlaceholderInLoadingState {
     
@@ -110,13 +110,13 @@
     return placeholderView;
 }
 
-- (UIView *)wcq_tableViewPlaceholderInEmptyDatasourceState {
-    
-    UIImageView *placeholderView = [UIImageView new];
-    placeholderView.contentMode = UIViewContentModeScaleAspectFill;
-    placeholderView.image = [UIImage imageNamed:@"emptyData"];
-    return placeholderView;
-}
+//- (UIView *)wcq_tableViewPlaceholderInEmptyDatasourceState {
+//    
+//    UIImageView *placeholderView = [UIImageView new];
+//    placeholderView.contentMode = UIViewContentModeScaleAspectFill;
+//    placeholderView.image = [UIImage imageNamed:@"emptyData"];
+//    return placeholderView;
+//}
 
 - (BOOL)wcq_enableScroll {
     

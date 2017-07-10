@@ -10,17 +10,8 @@
 #import "WCQTableViewPlaceholderDelegate.h"
 #import <objc/runtime.h>
 
-typedef NS_ENUM(NSInteger, WCQTableViewRefreshStyle) {
-    
-    WCQTableViewNoramlStyle,          //Default tableView style
-    WCQTableViewLoadingStyle,         //The tableView is loading data
-    WCQTableViewAnormalNetworkStyle,  //The tableView is in a anormal network state
-    WCQTableViewEmptyDatasourceStyle  //The tableView has an empty datasource
-};
-
 @interface UITableView ()
 
-@property (nonatomic, assign) NSInteger tableViewStyle;
 @property (nonatomic, strong) UIView *emptyDatasourcePlaceholder;
 @property (nonatomic, strong) UIView *anormalNetworkPlaceholder;
 @property (nonatomic, strong) UIView *loadingPlaceholder;
@@ -88,7 +79,7 @@ typedef NS_ENUM(NSInteger, WCQTableViewRefreshStyle) {
                 self.loadingPlaceholder = [self.delegate performSelector:@selector(wcq_tableViewPlaceholderInLoadingState) withObject:nil];
             }else {
                 
-                [NSException exceptionWithName:NSGenericException reason:reason userInfo:nil];
+               @throw [NSException exceptionWithName:NSGenericException reason:reason userInfo:nil];
             }
             
             self.loadingPlaceholder.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
@@ -119,7 +110,7 @@ typedef NS_ENUM(NSInteger, WCQTableViewRefreshStyle) {
                 self.anormalNetworkPlaceholder = [self.delegate performSelector:@selector(wcq_tableViewPlaceholderInAnormalNetState) withObject:nil];
             }else {
                 
-                [NSException exceptionWithName:NSGenericException reason:reason userInfo:nil];
+                @throw [NSException exceptionWithName:NSGenericException reason:reason userInfo:nil];
             }
             
             self.anormalNetworkPlaceholder.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
@@ -134,18 +125,18 @@ typedef NS_ENUM(NSInteger, WCQTableViewRefreshStyle) {
 
 - (void)wcq_checkDatasourceIsEmpty {
     
-    id<UITableViewDataSource> delegate = self.dataSource;
+    id<UITableViewDataSource> dataSource = self.dataSource;
     NSInteger section = 1;
     BOOL isEmpty = YES;
     
-    if ([delegate respondsToSelector:@selector(numberOfSectionsInTableView:)]) {
+    if ([dataSource respondsToSelector:@selector(numberOfSectionsInTableView:)]) {
         
-        section = [delegate numberOfSectionsInTableView:self];
+        section = [dataSource numberOfSectionsInTableView:self];
     }
     
     for (NSInteger index = 0; index < section; index++) {
         
-        NSInteger rows = [delegate tableView:self numberOfRowsInSection:index];
+        NSInteger rows = [dataSource tableView:self numberOfRowsInSection:index];
         if (rows) {
             
             isEmpty = NO;
@@ -167,7 +158,7 @@ typedef NS_ENUM(NSInteger, WCQTableViewRefreshStyle) {
                 self.emptyDatasourcePlaceholder = [self.delegate performSelector:@selector(wcq_tableViewPlaceholderInEmptyDatasourceState) withObject:nil];
             }else {
                 
-                [NSException exceptionWithName:NSGenericException reason:reason userInfo:nil];
+                @throw [NSException exceptionWithName:NSGenericException reason:reason userInfo:nil];
             }
             
             [self wcq_checkEnableToSroll];
@@ -200,12 +191,6 @@ typedef NS_ENUM(NSInteger, WCQTableViewRefreshStyle) {
 }
 
 #pragma mark - Getter Methods
-- (NSInteger)tableViewStyle {
-    
-    NSNumber *style = objc_getAssociatedObject(self, _cmd);
-    return [style integerValue];
-}
-
 - (UIView *)emptyDatasourcePlaceholder {
     
     return objc_getAssociatedObject(self, _cmd);
@@ -222,12 +207,6 @@ typedef NS_ENUM(NSInteger, WCQTableViewRefreshStyle) {
 }
 
 #pragma mark - Setter Methods
-- (void)setTableViewStyle:(NSInteger)tableViewStyle {
-    
-    NSNumber *style = [NSNumber numberWithInteger:tableViewStyle];
-    objc_setAssociatedObject(self, @selector(tableViewStyle), style, OBJC_ASSOCIATION_ASSIGN);
-}
-
 - (void)setEmptyDatasourcePlaceholder:(UIView *)emptyDatasourcePlaceholder {
     
     objc_setAssociatedObject(self, @selector(emptyDatasourcePlaceholder), emptyDatasourcePlaceholder, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
