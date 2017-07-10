@@ -110,13 +110,13 @@
     return placeholderView;
 }
 
-//- (UIView *)wcq_tableViewPlaceholderInEmptyDatasourceState {
-//    
-//    UIImageView *placeholderView = [UIImageView new];
-//    placeholderView.contentMode = UIViewContentModeScaleAspectFill;
-//    placeholderView.image = [UIImage imageNamed:@"emptyData"];
-//    return placeholderView;
-//}
+- (UIView *)wcq_tableViewPlaceholderInEmptyDatasourceState {
+    
+    UIImageView *placeholderView = [UIImageView new];
+    placeholderView.contentMode = UIViewContentModeScaleAspectFill;
+    placeholderView.image = [UIImage imageNamed:@"emptyData"];
+    return placeholderView;
+}
 
 - (BOOL)wcq_enableScroll {
     
