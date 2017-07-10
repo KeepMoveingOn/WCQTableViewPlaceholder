@@ -54,73 +54,64 @@
 
 - (void)wcq_reloadData {
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        [self wcq_reloadData];
-        [self wcq_checkDatasourceIsEmpty];
-    });
+    [self wcq_reloadData];
+    [self wcq_checkDatasourceIsEmpty];
 }
 
 - (void)wcq_setLoadingState {
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    [self wcq_clearnExistPlaceholder];
+    [self wcq_checkEnableToSroll];
+    
+    if (!self.loadingPlaceholder) {
         
-        [self wcq_clearnExistPlaceholder];
-        [self wcq_checkEnableToSroll];
-        
-        if (!self.loadingPlaceholder) {
+        NSString *reason = @"If you want to show the placeholder view of anormal net work, please implement the wcq_tableViewPlaceholderInLoadingState Method in your custom tableView of tableView delegate";
+        if ([self respondsToSelector:@selector(wcq_tableViewPlaceholderInLoadingState)]) {
             
-            NSString *reason = @"If you want to show the placeholder view of anormal net work, please implement the wcq_tableViewPlaceholderInLoadingState Method in your custom tableView of tableView delegate";
-            if ([self respondsToSelector:@selector(wcq_tableViewPlaceholderInLoadingState)]) {
-                
-                self.loadingPlaceholder = [self performSelector:@selector(wcq_tableViewPlaceholderInLoadingState) withObject:nil];
-            }else if ([self.delegate respondsToSelector:@selector(wcq_tableViewPlaceholderInLoadingState)]) {
-                
-                self.loadingPlaceholder = [self.delegate performSelector:@selector(wcq_tableViewPlaceholderInLoadingState) withObject:nil];
-            }else {
-                
-               @throw [NSException exceptionWithName:NSGenericException reason:reason userInfo:nil];
-            }
+            self.loadingPlaceholder = [self performSelector:@selector(wcq_tableViewPlaceholderInLoadingState) withObject:nil];
+        }else if ([self.delegate respondsToSelector:@selector(wcq_tableViewPlaceholderInLoadingState)]) {
             
-            self.loadingPlaceholder.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
-            [self addSubview:self.loadingPlaceholder];
+            self.loadingPlaceholder = [self.delegate performSelector:@selector(wcq_tableViewPlaceholderInLoadingState) withObject:nil];
         }else {
             
-            self.loadingPlaceholder.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
-            [self addSubview:self.loadingPlaceholder];
+            @throw [NSException exceptionWithName:NSGenericException reason:reason userInfo:nil];
         }
-    });
+        
+        self.loadingPlaceholder.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
+        [self addSubview:self.loadingPlaceholder];
+    }else {
+        
+        self.loadingPlaceholder.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
+        [self addSubview:self.loadingPlaceholder];
+    }
 }
 
 - (void)wcq_setAnormalNetwork {
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    [self wcq_clearnExistPlaceholder];
+    [self wcq_checkEnableToSroll];
+    
+    if (!self.anormalNetworkPlaceholder) {
         
-        [self wcq_clearnExistPlaceholder];
-        [self wcq_checkEnableToSroll];
-        
-        if (!self.anormalNetworkPlaceholder) {
+        NSString *reason = @"If you want to show the placeholder view of anormal net work, please implement the wcq_tableViewPlaceholderInAnormalNetState Method in your custom tableView of tableView delegate";
+        if ([self respondsToSelector:@selector(wcq_tableViewPlaceholderInAnormalNetState)]) {
             
-            NSString *reason = @"If you want to show the placeholder view of anormal net work, please implement the wcq_tableViewPlaceholderInAnormalNetState Method in your custom tableView of tableView delegate";
-            if ([self respondsToSelector:@selector(wcq_tableViewPlaceholderInAnormalNetState)]) {
-                
-                self.anormalNetworkPlaceholder = [self performSelector:@selector(wcq_tableViewPlaceholderInAnormalNetState) withObject:nil];
-            }else if ([self.delegate respondsToSelector:@selector(wcq_tableViewPlaceholderInAnormalNetState)]) {
-                
-                self.anormalNetworkPlaceholder = [self.delegate performSelector:@selector(wcq_tableViewPlaceholderInAnormalNetState) withObject:nil];
-            }else {
-                
-                @throw [NSException exceptionWithName:NSGenericException reason:reason userInfo:nil];
-            }
+            self.anormalNetworkPlaceholder = [self performSelector:@selector(wcq_tableViewPlaceholderInAnormalNetState) withObject:nil];
+        }else if ([self.delegate respondsToSelector:@selector(wcq_tableViewPlaceholderInAnormalNetState)]) {
             
-            self.anormalNetworkPlaceholder.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
-            [self addSubview:self.anormalNetworkPlaceholder];
+            self.anormalNetworkPlaceholder = [self.delegate performSelector:@selector(wcq_tableViewPlaceholderInAnormalNetState) withObject:nil];
         }else {
             
-            self.anormalNetworkPlaceholder.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
-            [self addSubview:self.anormalNetworkPlaceholder];
+            @throw [NSException exceptionWithName:NSGenericException reason:reason userInfo:nil];
         }
-    });
+        
+        self.anormalNetworkPlaceholder.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
+        [self addSubview:self.anormalNetworkPlaceholder];
+    }else {
+        
+        self.anormalNetworkPlaceholder.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
+        [self addSubview:self.anormalNetworkPlaceholder];
+    }
 }
 
 - (void)wcq_checkDatasourceIsEmpty {

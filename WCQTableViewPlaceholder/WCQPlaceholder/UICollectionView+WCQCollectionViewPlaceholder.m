@@ -54,73 +54,64 @@
 
 - (void)wcq_reloadData {
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        [self wcq_reloadData];
-        [self wcq_checkDatasourceIsEmpty];
-    });
+    [self wcq_reloadData];
+    [self wcq_checkDatasourceIsEmpty];
 }
 
 - (void)wcq_setLoadingState {
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    [self wcq_clearnExistPlaceholder];
+    [self wcq_checkEnableToSroll];
+    
+    if (!self.loadingPlaceholder) {
         
-        [self wcq_clearnExistPlaceholder];
-        [self wcq_checkEnableToSroll];
-        
-        if (!self.loadingPlaceholder) {
+        NSString *reason = @"If you want to show the placeholder view of anormal net work, please implement the wcq_collectionViewPlaceholderInLoadingState Method in your custom collectionView of collectionView delegate";
+        if ([self respondsToSelector:@selector(wcq_collectionViewPlaceholderInLoadingState)]) {
             
-            NSString *reason = @"If you want to show the placeholder view of anormal net work, please implement the wcq_collectionViewPlaceholderInLoadingState Method in your custom collectionView of collectionView delegate";
-            if ([self respondsToSelector:@selector(wcq_collectionViewPlaceholderInLoadingState)]) {
-                
-                self.loadingPlaceholder = [self performSelector:@selector(wcq_collectionViewPlaceholderInLoadingState) withObject:nil];
-            }else if ([self.delegate respondsToSelector:@selector(wcq_collectionViewPlaceholderInLoadingState)]) {
-                
-                self.loadingPlaceholder = [self.delegate performSelector:@selector(wcq_collectionViewPlaceholderInLoadingState) withObject:nil];
-            }else {
-                
-                [NSException exceptionWithName:NSGenericException reason:reason userInfo:nil];
-            }
+            self.loadingPlaceholder = [self performSelector:@selector(wcq_collectionViewPlaceholderInLoadingState) withObject:nil];
+        }else if ([self.delegate respondsToSelector:@selector(wcq_collectionViewPlaceholderInLoadingState)]) {
             
-            self.loadingPlaceholder.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
-            [self addSubview:self.loadingPlaceholder];
+            self.loadingPlaceholder = [self.delegate performSelector:@selector(wcq_collectionViewPlaceholderInLoadingState) withObject:nil];
         }else {
             
-            self.loadingPlaceholder.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
-            [self addSubview:self.loadingPlaceholder];
+            [NSException exceptionWithName:NSGenericException reason:reason userInfo:nil];
         }
-    });
+        
+        self.loadingPlaceholder.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
+        [self addSubview:self.loadingPlaceholder];
+    }else {
+        
+        self.loadingPlaceholder.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
+        [self addSubview:self.loadingPlaceholder];
+    }
 }
 
 - (void)wcq_setAnormalNetwork {
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    [self wcq_clearnExistPlaceholder];
+    [self wcq_checkEnableToSroll];
+    
+    if (!self.anormalNetworkPlaceholder) {
         
-        [self wcq_clearnExistPlaceholder];
-        [self wcq_checkEnableToSroll];
-        
-        if (!self.anormalNetworkPlaceholder) {
+        NSString *reason = @"If you want to show the placeholder view of anormal net work, please implement the wcq_collectionViewPlaceholderInAnormalNetState Method in your custom collectionView of collectionView delegate";
+        if ([self respondsToSelector:@selector(wcq_collectionViewPlaceholderInAnormalNetState)]) {
             
-            NSString *reason = @"If you want to show the placeholder view of anormal net work, please implement the wcq_collectionViewPlaceholderInAnormalNetState Method in your custom collectionView of collectionView delegate";
-            if ([self respondsToSelector:@selector(wcq_collectionViewPlaceholderInAnormalNetState)]) {
-                
-                self.anormalNetworkPlaceholder = [self performSelector:@selector(wcq_collectionViewPlaceholderInAnormalNetState) withObject:nil];
-            }else if ([self.delegate respondsToSelector:@selector(wcq_collectionViewPlaceholderInAnormalNetState)]) {
-                
-                self.anormalNetworkPlaceholder = [self.delegate performSelector:@selector(wcq_collectionViewPlaceholderInAnormalNetState) withObject:nil];
-            }else {
-                
-                @throw [NSException exceptionWithName:NSGenericException reason:reason userInfo:nil];
-            }
+            self.anormalNetworkPlaceholder = [self performSelector:@selector(wcq_collectionViewPlaceholderInAnormalNetState) withObject:nil];
+        }else if ([self.delegate respondsToSelector:@selector(wcq_collectionViewPlaceholderInAnormalNetState)]) {
             
-            self.anormalNetworkPlaceholder.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
-            [self addSubview:self.anormalNetworkPlaceholder];
+            self.anormalNetworkPlaceholder = [self.delegate performSelector:@selector(wcq_collectionViewPlaceholderInAnormalNetState) withObject:nil];
         }else {
             
-            self.anormalNetworkPlaceholder.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
-            [self addSubview:self.anormalNetworkPlaceholder];
+            @throw [NSException exceptionWithName:NSGenericException reason:reason userInfo:nil];
         }
-    });
+        
+        self.anormalNetworkPlaceholder.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
+        [self addSubview:self.anormalNetworkPlaceholder];
+    }else {
+        
+        self.anormalNetworkPlaceholder.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
+        [self addSubview:self.anormalNetworkPlaceholder];
+    }
 }
 
 - (void)wcq_checkDatasourceIsEmpty {
@@ -136,8 +127,8 @@
     
     for (NSInteger index = 0; index < section; index++) {
         
-        NSInteger rows = [dataSource collectionView:self numberOfItemsInSection:index];
-        if (rows) {
+        NSInteger items = [dataSource collectionView:self numberOfItemsInSection:index];
+        if (items) {
             
             isEmpty = NO;
             break;

@@ -32,7 +32,7 @@
 
 @optional
 /**
- Wether the tableView can scroll When the palceholder view is showing
+ Wether the collectionView can scroll When the palceholder view is showing
  
  @return It returns NO by default
  */
